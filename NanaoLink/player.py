@@ -6,6 +6,15 @@ from typing import Optional, Union
 import discord.ext
 
 class Nanao_Player(wavelink.Player):
+    def __init__(self, *args, guild: discord.Guild, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._guild = guild
+        self.voice_channel = None
+
+    @property
+    def guild(self):
+        return self._guild
+
     async def VoiceConnect(self, source: Union[discord.ext.commands.Context, discord.Interaction]):
         """
         Connects the bot to the user's voice channel.
@@ -24,14 +33,14 @@ class Nanao_Player(wavelink.Player):
             raise AttributeError("User is not connected to a voice channel.")
         
         player: Optional[wavelink.Player] = source.guild.voice_client
-        if not player:
-            player = await voice_channel.connect(cls=wavelink.Player, self_deaf=True)
-            self.guild = source.guild
-
-        if player.connected:
-            return player
-        else:
-            raise RuntimeError("Failed to connect to the voice channel")
+        if not player or not player.connected:
+            try:
+                player = await voice_channel.connect(cls=wavelink.Player, self_deaf=True)
+                self.voice_channel = voice_channel
+            except Exception as e:
+                raise RuntimeError(f"Failed to connect to the voice channel: {str(e)}")
+            
+        return player
     
     async def TrackSearch(self, query: str):
         tracks: wavelink.Playable = await wavelink.Playable.search(query)
@@ -39,7 +48,7 @@ class Nanao_Player(wavelink.Player):
             return None
         
         if isinstance(tracks, wavelink.Playlist):
-            self.queue.put_wait(tracks)
+            await self.queue.put_wait(tracks)
             return tracks
         else:
             track: wavelink.Playable = tracks[0]
@@ -47,7 +56,16 @@ class Nanao_Player(wavelink.Player):
             return [track]
         
     def QueueGet(self):
-        return self.queue.get()
+        track = self.queue.get()
+        return track if track else None
 
-    async def playTrack(self, track: wavelink.Playable, volume: int = 70):
-        await self.play(track=track, volume=volume)
+    async def playTrack(self, track: wavelink.Playable, volume: int = 60):
+        if track is None:
+            raise ValueError("Track cannot be None")
+        
+        player: Optional[wavelink.Player] = self.guild.voice_client 
+        if player is None or not player.connected:
+            raise RuntimeError("Player is not connected to a voice channel")
+        
+        await self.play(track)
+        await player.set_volume(volume)
