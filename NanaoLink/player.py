@@ -26,4 +26,28 @@ class Nanao_Player(wavelink.Player):
         player: Optional[wavelink.Player] = source.guild.voice_client
         if not player:
             player = await voice_channel.connect(cls=wavelink.Player, self_deaf=True)
-        return player
+            self.guild = source.guild
+
+        if player.connected:
+            return player
+        else:
+            raise RuntimeError("Failed to connect to the voice channel")
+    
+    async def TrackSearch(self, query: str):
+        tracks: wavelink.Playable = await wavelink.Playable.search(query)
+        if not tracks:
+            return None
+        
+        if isinstance(tracks, wavelink.Playlist):
+            self.queue.put_wait(tracks)
+            return tracks
+        else:
+            track: wavelink.Playable = tracks[0]
+            await self.queue.put_wait(track)
+            return [track]
+        
+    def QueueGet(self):
+        return self.queue.get()
+
+    async def playTrack(self, track: wavelink.Playable, volume: int = 70):
+        await self.play(track=track, volume=volume)
