@@ -85,3 +85,46 @@ class LowPass:
         filters: wavelink.Filters = self.player.filters
         filters.low_pass.set(smoothing=smoothing)
         await self.player.set_filters(filters)
+
+class Distortion:
+    """
+    Class สำหรับจัดการฟิลเตอร์ Distortion
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Distortion
+    """
+    def __init__(self, player: wavelink.Player):
+        """
+        กำหนดค่าเริ่มต้นให้กับ Distortion
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+    
+    async def set(self, sin_offset=0.05, sin_scale=0.2, cos_offset=0.05, cos_scale=0.2, tan_offset=0.0, tan_scale=0.1, offset=0.0, scale=0.5):
+        """
+        ตั้งค่าฟิลเตอร์ Distortion สำหรับเสียง
+
+        ฟังก์ชันนี้จะปรับค่าฟิลเตอร์ Distortion ตามที่ระบุ
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ในผู้เล่น
+
+        Args:
+            sin_offset (float): ค่าการปรับ sin offset (ค่าเริ่มต้น 0.05)
+            sin_scale (float): ค่าการปรับ sin scale (ค่าเริ่มต้น 0.2)
+            cos_offset (float): ค่าการปรับ cos offset (ค่าเริ่มต้น 0.05)
+            cos_scale (float): ค่าการปรับ cos scale (ค่าเริ่มต้น 0.2)
+            tan_offset (float): ค่าการปรับ tan offset (ค่าเริ่มต้น 0.0)
+            tan_scale (float): ค่าการปรับ tan scale (ค่าเริ่มต้น 0.1)
+            offset (float): ค่าการปรับ offset (ค่าเริ่มต้น 0.0)
+            scale (float): ค่าการปรับ scale (ค่าเริ่มต้น 0.5)
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.distortion.set(
+            sin_offset=sin_offset,
+            sin_scale=sin_scale,
+            cos_offset=cos_offset,
+            cos_scale=cos_scale,
+            tan_offset=tan_offset,
+            tan_scale=tan_scale,
+            offset=offset,
+            scale=scale
+        )
+        await self.player.set_filters(filters)
