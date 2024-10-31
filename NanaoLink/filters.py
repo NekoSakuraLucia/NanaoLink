@@ -7,7 +7,7 @@ class Karaoke:
     """
     def __init__(self, player: wavelink.Player) -> None:
         """
-        กำหนดค่าเริ่มต้นให้กับ Nightcore
+        กำหนดค่าเริ่มต้นให้กับ Karaoke
         Args:
             player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
         """
@@ -57,4 +57,31 @@ class Nightcore:
         """
         filters: wavelink.Filters = self.player.filters
         filters.timescale.set(speed=speed, pitch=pitch, rate=rate)
+        await self.player.set_filters(filters)
+
+class LowPass:
+    """
+    Class สำหรับจัดการฟิลเตอร์ LowPass
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ LowPass
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ LowPass
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+
+    async def set(self, smoothing=20):
+        """
+        ตั้งค่าฟิลเตอร์ low_pass สำหรับ LowPass
+
+        ฟังก์ชันนี้จะปรับค่าฟิลเตอร์ LowPass ตามที่ระบุ
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ผู้เล่น
+
+        Args:
+            smooting (float): ค่าความสมูทของเพลง (ค่าเริ่มต้น 20)
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.low_pass.set(smoothing=smoothing)
         await self.player.set_filters(filters)
