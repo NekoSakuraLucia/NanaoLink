@@ -2,7 +2,7 @@ import discord.ext.commands
 import wavelink
 import discord
 from typing import Optional, Union
-from .filters import Nightcore, Karaoke, LowPass, Distortion
+from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo
 
 import discord.ext
 
@@ -60,6 +60,14 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า Distortion ที่ถูกสร้างจากผู้เล่นนี้ 
         """
         return Distortion(self)
+    
+    @property
+    def termolo(self):
+        """
+        Property สำหรับสร้างอ็อบเจกต์ Termolo 
+        และคืนค่า Termolo ที่ถูกสร้างจากผู้เล่นนี้ 
+        """
+        return Termolo(self)
     
     def create_filters(self):
         """ 

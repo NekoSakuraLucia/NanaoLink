@@ -128,3 +128,31 @@ class Distortion:
             scale=scale
         )
         await self.player.set_filters(filters)
+
+class Termolo:
+    """
+    Class สำหรับจัดการฟิลเตอร์ Termolo
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Termolo
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ Termolo
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+
+    async def set(self, frequency=5.0, depth=0.7):
+        """
+        ตั้งค่าฟิลเตอร์ Tremolo สำหรับเสียง
+
+        ฟังก์ชันนี้จะปรับค่าฟิลเตอร์ Tremolo ตามที่ระบุ
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ในผู้เล่น
+
+        Args:
+            frequency (float): ความถี่ของ tremolo (ค่าเริ่มต้น 5.0 Hz)
+            depth (float): ความลึกของ tremolo (ค่าเริ่มต้น 0.7)
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.tremolo.set(frequency=frequency, depth=depth)
+        await self.player.set_filters(filters)
