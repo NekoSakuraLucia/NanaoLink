@@ -1,8 +1,9 @@
 import discord.ext.commands
 import wavelink
 import discord
-from typing import Optional, Union
+from typing import Optional
 from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo, SlowDown, Rotation
+from .voice import Voice
 
 import discord.ext
 
@@ -93,33 +94,13 @@ class Nanao_Player(wavelink.Player):
         โดยในที่นี้จะใช้ wavelink เป็นฐานในการสร้างฟิลเตอร์ใหม่
         """
         return wavelink.Filters()
-
-    async def VoiceConnect(self, source: Union[discord.ext.commands.Context, discord.Interaction]):
+    
+    @property
+    def voice(self):
         """
-        Connects the bot to the user's voice channel.
-        Raises errors for users to handle them externally.
+        Property สำหรับการสร้าง player เกี่ยวกับช่องเสียง
         """
-        if isinstance(source, discord.ext.commands.Context):
-            author = source.author
-            voice_channel = author.voice.channel if author.voice else None
-        elif isinstance(source, discord.Interaction):
-            author = source.user
-            voice_channel = author.voice.channel if author.voice else None
-        else:
-            raise TypeError("Invalid source type. Expected Context or Interaction.")
-
-        if not voice_channel:
-            raise AttributeError("User is not connected to a voice channel.")
-        
-        player: Optional[wavelink.Player] = source.guild.voice_client
-        if not player or not player.connected:
-            try:
-                player = await voice_channel.connect(cls=wavelink.Player, self_deaf=True)
-                self.voice_channel = voice_channel
-            except Exception as e:
-                raise RuntimeError(f"Failed to connect to the voice channel: {str(e)}")
-            
-        return player
+        return Voice(self)
     
     async def TrackSearch(self, query: str):
         tracks: wavelink.Playable = await wavelink.Playable.search(query)
