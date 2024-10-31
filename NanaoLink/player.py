@@ -15,17 +15,35 @@ class Nanao_Player(wavelink.Player):
 
     @property
     def guild(self):
+        """
+        Property สำหรับการเข้าถึงข้อมูล guild
+        และค่าค่าข้อมูล guild ที่ถูกเก็บไว้ใน _guild
+        """
         return self._guild
     
     @property
     def filters(self):
+        """ 
+        Property สำหรับเข้าถึงฟิลเตอร์ 
+        และคืนค่าฟิลเตอร์ที่ถูกสร้างขึ้นใน _filters 
+        """
         return self._filters
 
     @property
     def nightcore(self):
+        """ 
+        Property สำหรับสร้างอ็อบเจกต์ Nightcore 
+        และคืนค่า Nightcore ที่ถูกสร้างจากผู้เล่นนี้ 
+        """
         return Nightcore(self)
     
     def create_filters(self):
+        """ 
+        ฟังก์ชันสำหรับสร้างฟิลเตอร์ใหม่ 
+        และคืนค่าฟิลเตอร์ใหม่จาก wavelink.Filters
+
+        โดยในที่นี้จะใช้ wavelink เป็นฐานในการสร้างฟิลเตอร์ใหม่
+        """
         return wavelink.Filters()
 
     async def VoiceConnect(self, source: Union[discord.ext.commands.Context, discord.Interaction]):
