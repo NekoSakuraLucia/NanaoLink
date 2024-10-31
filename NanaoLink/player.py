@@ -2,7 +2,7 @@ import discord.ext.commands
 import wavelink
 import discord
 from typing import Optional, Union
-from .filters import Nightcore
+from .filters import Nightcore, Karaoke
 
 import discord.ext
 
@@ -36,6 +36,14 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า Nightcore ที่ถูกสร้างจากผู้เล่นนี้ 
         """
         return Nightcore(self)
+    
+    @property
+    def karaoke(self):
+        """
+        Property สำหรับสร้างอ็อบเจกต์ Karaoke 
+        และคืนค่า Kraoke ที่ถูกสร้างจากผู้เล่นนี้ 
+        """
+        return Karaoke(self)
     
     def create_filters(self):
         """ 
