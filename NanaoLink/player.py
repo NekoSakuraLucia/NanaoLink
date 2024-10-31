@@ -2,7 +2,7 @@ import discord.ext.commands
 import wavelink
 import discord
 from typing import Optional, Union
-from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo, SlowDown
+from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo, SlowDown, Rotation
 
 import discord.ext
 
@@ -76,6 +76,14 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า SlowDown ที่ถูกสร้างจากผู้เล่นนี้ 
         """
         return SlowDown(self)
+    
+    @property
+    def rotation(self):
+        """
+        Property สำหรับสร้างอ็อบเจกต์ Rotation 
+        และคืนค่า Rotation ที่ถูกสร้างจากผู้เล่นนี้ 
+        """
+        return Rotation(self)
     
     def create_filters(self):
         """ 

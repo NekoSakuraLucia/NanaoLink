@@ -185,3 +185,30 @@ class SlowDown:
         filters: wavelink.Filters = self.player.filters
         filters.timescale.set(speed=speed, pitch=pitch, rate=rate)
         await self.player.set_filters(filters)
+
+class Rotation:
+    """
+    Class สำหรับจัดการฟิลเตอร์ Rotation
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Rotation
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ Rotation
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+
+    async def set(self, rotation_hz=0.2):
+        """
+        ตั้งค่าฟิลเตอร์สำหรับการหมุนเสียง Rotation
+
+        ฟังก์ชันนี้จะปรับความถี่การหมุนของเสียงตามที่ระบุ
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ของผู้เล่น
+
+        Args:
+            rotation_hz (float): ความถี่การหมุนของเสียง (ค่าเริ่มต้น 0.2)
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.rotation.set(rotation_hz=rotation_hz)
+        await self.player.set_filters(filters)
