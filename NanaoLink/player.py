@@ -2,6 +2,7 @@ import discord.ext.commands
 import wavelink
 import discord
 from typing import Optional, Union
+from .filters import Nightcore
 
 import discord.ext
 
@@ -10,10 +11,22 @@ class Nanao_Player(wavelink.Player):
         super().__init__(*args, **kwargs)
         self._guild = guild
         self.voice_channel = None
+        self._filters = self.create_filters()
 
     @property
     def guild(self):
         return self._guild
+    
+    @property
+    def filters(self):
+        return self._filters
+
+    @property
+    def nightcore(self):
+        return Nightcore(self)
+    
+    def create_filters(self):
+        return wavelink.Filters()
 
     async def VoiceConnect(self, source: Union[discord.ext.commands.Context, discord.Interaction]):
         """
