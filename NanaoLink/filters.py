@@ -43,7 +43,7 @@ class Nightcore:
         """
         self.player = player
     
-    async def set(self, speed=1.2, pitch=1.2, rate=1):
+    async def set(self, speed=1.2, pitch=1.2, rate: float = 1):
         """
         ตั้งค่าฟิลเตอร์ timescale สำหรับ Nightcore
 
@@ -155,4 +155,33 @@ class Termolo:
         """
         filters: wavelink.Filters = self.player.filters
         filters.tremolo.set(frequency=frequency, depth=depth)
+        await self.player.set_filters(filters)
+
+class SlowDown:
+    """
+    Class สำหรับจัดการฟิลเตอร์ SlowDown
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ SlowDown
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ SlowDown
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+    
+    async def set(self, speed=0.8, pitch=0.9, rate: float = 1):
+        """
+        ตั้งค่าฟิลเตอร์ timescale สำหรับ SlowDown
+
+        ฟังก์ชันนี้จะปรับความเร็วและเสียงของเพลงตามที่ระบุ
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ผู้เล่น
+
+        Args:
+            speed (float): ค่าความเร็วของเพลง (ค่าเริ่มต้น 0.8)
+            pitch (float): ค่าพิชของเสียง (ค่าเริ่มต้น 0.9)
+            rate (float): ค่าระดับการเปลี่ยนแปลง (ค่าเริ่มต้น 1)
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.timescale.set(speed=speed, pitch=pitch, rate=rate)
         await self.player.set_filters(filters)
