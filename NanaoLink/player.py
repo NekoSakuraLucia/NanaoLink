@@ -12,6 +12,7 @@ class Nanao_Player(wavelink.Player):
         super().__init__(*args, **kwargs)
         self._guild = guild
         self.voice_channel = None
+        self._queue_mode = wavelink.QueueMode.normal
         self._filters = self.create_filters()
         self._voice = Voice(self)
         self._nightcore = Nightcore(self)
@@ -102,6 +103,25 @@ class Nanao_Player(wavelink.Player):
         โดยในที่นี้จะใช้ wavelink เป็นฐานในการสร้างฟิลเตอร์ใหม่
         """
         return wavelink.Filters()
+    
+    @property
+    def set_repeat(self):
+        return self
+    
+    @property
+    def current_mode(self):
+        self._queue_mode = wavelink.QueueMode.loop
+        return self._queue_mode
+    
+    @property
+    def normal_mode(self):
+        self._queue_mode = wavelink.QueueMode.normal
+        return self._queue_mode
+    
+    @property
+    def queue_mode(self):
+        self._queue_mode = wavelink.QueueMode.loop_all
+        return self.queue.count
     
     @property
     def voice(self):
