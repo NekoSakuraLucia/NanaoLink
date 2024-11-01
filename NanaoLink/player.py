@@ -13,6 +13,7 @@ class Nanao_Player(wavelink.Player):
         self._guild = guild
         self.voice_channel = None
         self._filters = self.create_filters()
+        self._nightcore = Nightcore(self)
 
     @property
     def guild(self):
@@ -36,7 +37,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ Nightcore 
         และคืนค่า Nightcore ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return Nightcore(self)
+        return self._nightcore
     
     @property
     def karaoke(self):
@@ -85,6 +86,10 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า Rotation ที่ถูกสร้างจากผู้เล่นนี้ 
         """
         return Rotation(self)
+    
+    async def clearFilters(self):
+        await self.filters.reset()
+        self._nightcore._enabled = False
     
     def create_filters(self):
         """ 
