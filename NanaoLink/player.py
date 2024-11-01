@@ -4,6 +4,7 @@ import discord
 from typing import Optional
 from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo, SlowDown, Rotation
 from .voice import Voice
+from .enums import RepeatMode
 
 import discord.ext
 
@@ -12,7 +13,7 @@ class Nanao_Player(wavelink.Player):
         super().__init__(*args, **kwargs)
         self._guild = guild
         self.voice_channel = None
-        self._queue_mode = wavelink.QueueMode.normal
+        self._queue_mode = RepeatMode.NORMAL
         self._filters = self.create_filters()
         self._voice = Voice(self)
         self._nightcore = Nightcore(self)
@@ -105,30 +106,35 @@ class Nanao_Player(wavelink.Player):
         return wavelink.Filters()
     
     def _check_queue_length(self):
+        """
+        ตรวจสอบว่ามีเพลงในคิวเพียงพอในการตั้งค่าโหมดการเล่นซ้ำ
+
+        Raises:
+            RuntimeError: หากจำนวนเพลงคิววมีน้อยกว่า 2
+        """
         if self.queue.count < 2:
             raise RuntimeError("ไม่สามารถตั้งค่าโหมดเล่นซ้ำได้ เพลงในคิวไม่เพียงพอ")
     
-    @property
-    def set_repeat(self):
-        return self
-    
-    @property
-    def current_mode(self):
+    def set_repeat(self, mode: RepeatMode):
+        """ตั้งค่าโหมดการเล่นซ้ำสำหรับเพลง
+        
+        Args:
+            mode (RepeatMode): โหมดการเล่นซ้ำที่ต้องการตั้งค่า (CURRENT, NORMAL, QUEUE)
+        
+        Raises:
+            RuntimeError: หากจำนวนเพลงในคิวมีน้อยกว่า 2
+        """
         self._check_queue_length()
-        self._queue_mode = wavelink.QueueMode.loop
-        return self._queue_mode
-    
-    @property
-    def normal_mode(self):
-        self._check_queue_length()
-        self._queue_mode = wavelink.QueueMode.normal
-        return self._queue_mode
-    
+        self._queue_mode = mode
+
     @property
     def queue_mode(self):
-        self._check_queue_length()
-        self._queue_mode = wavelink.QueueMode.loop_all
-        return self.queue.count
+        """ส่งคืนโหมดคิวปัจจุบันของเครื่องเล่น
+        
+        Returns:
+            RepeatMode: โหมดการเล่นซ้ำปัจจุบัน
+        """
+        return self._queue_mode
     
     @property
     def voice(self):
