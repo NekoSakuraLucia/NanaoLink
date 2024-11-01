@@ -104,22 +104,29 @@ class Nanao_Player(wavelink.Player):
         """
         return wavelink.Filters()
     
+    def _check_queue_length(self):
+        if self.queue.count < 2:
+            raise RuntimeError("ไม่สามารถตั้งค่าโหมดเล่นซ้ำได้ เพลงในคิวไม่เพียงพอ")
+    
     @property
     def set_repeat(self):
         return self
     
     @property
     def current_mode(self):
+        self._check_queue_length()
         self._queue_mode = wavelink.QueueMode.loop
         return self._queue_mode
     
     @property
     def normal_mode(self):
+        self._check_queue_length()
         self._queue_mode = wavelink.QueueMode.normal
         return self._queue_mode
     
     @property
     def queue_mode(self):
+        self._check_queue_length()
         self._queue_mode = wavelink.QueueMode.loop_all
         return self.queue.count
     
