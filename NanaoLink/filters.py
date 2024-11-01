@@ -42,14 +42,6 @@ class Nightcore:
             player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
         """
         self.player = player
-        self._enabled = False
-
-    @property
-    def on(self) -> str:
-        """
-        คืนค่าสถานะของฟิลเตอร์ในรูปแบบ "enabled" หรือ "disabled"
-        """
-        return "enabled" if self._enabled else "disabled"
     
     async def set(self, speed=1.2, pitch=1.2, rate: float = 1):
         """
@@ -66,7 +58,6 @@ class Nightcore:
         filters: wavelink.Filters = self.player.filters
         filters.timescale.set(speed=speed, pitch=pitch, rate=rate)
         await self.player.set_filters(filters)
-        self._enabled = True
 
 class LowPass:
     """

@@ -13,7 +13,14 @@ class Nanao_Player(wavelink.Player):
         self._guild = guild
         self.voice_channel = None
         self._filters = self.create_filters()
+        self._voice = Voice(self)
         self._nightcore = Nightcore(self)
+        self._karaoke = Karaoke(self)
+        self._lowpass = LowPass(self)
+        self._termolo = Termolo(self)
+        self._slowdown = SlowDown(self)
+        self._rotation = Rotation(self)
+        self._distortion = Distortion(self)
 
     @property
     def guild(self):
@@ -45,7 +52,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ Karaoke 
         และคืนค่า Kraoke ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return Karaoke(self)
+        return self._karaoke
     
     @property
     def low_pass(self):
@@ -53,7 +60,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ LowPass 
         และคืนค่า LowPass ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return LowPass(self)
+        return self._lowpass
     
     @property
     def distortion(self):
@@ -61,7 +68,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ Distortion 
         และคืนค่า Distortion ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return Distortion(self)
+        return self._distortion
     
     @property
     def termolo(self):
@@ -69,7 +76,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ Termolo 
         และคืนค่า Termolo ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return Termolo(self)
+        return self._termolo
     
     @property
     def slow_down(self):
@@ -77,7 +84,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ SlowDown 
         และคืนค่า SlowDown ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return SlowDown(self)
+        return self._slowdown
     
     @property
     def rotation(self):
@@ -85,11 +92,7 @@ class Nanao_Player(wavelink.Player):
         Property สำหรับสร้างอ็อบเจกต์ Rotation 
         และคืนค่า Rotation ที่ถูกสร้างจากผู้เล่นนี้ 
         """
-        return Rotation(self)
-    
-    async def clearFilters(self):
-        await self.filters.reset()
-        self._nightcore._enabled = False
+        return self._rotation
     
     def create_filters(self):
         """ 
@@ -105,7 +108,7 @@ class Nanao_Player(wavelink.Player):
         """
         Property สำหรับการสร้าง player เกี่ยวกับช่องเสียง
         """
-        return Voice(self)
+        return self._voice
     
     async def TrackSearch(self, query: str):
         tracks: wavelink.Playable = await wavelink.Playable.search(query)
