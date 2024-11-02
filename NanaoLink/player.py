@@ -120,6 +120,15 @@ class Nanao_Player(wavelink.Player):
         return self.queue.mode
     
     async def TrackSearch(self, query: str):
+        """
+        ค้นหาแทร็กตามคำค้นหาที่กำหนด
+        
+        Args:
+            query (str): คำค้นสำหรับการค้นหาแทร็ก
+
+        Returns:
+            track (Playable): อาจคืนค่าเป็นลิสต์ที่มีแทร็กแรกที่พบ หรือ Playlist ถ้ามีหลายแทร็กคืนค่า None ถ้าไม่พบแทร็กเลย
+        """
         tracks: wavelink.Playable = await wavelink.Playable.search(query)
         if not tracks:
             return None
@@ -133,10 +142,25 @@ class Nanao_Player(wavelink.Player):
             return [track]
         
     def QueueGet(self):
-        track = self.queue.get()
-        return track if track else None
+        """
+        ดึงแทร็กถัดไปจากคิว
+
+        Returns:
+            QueueGet (Queue): แทร็กถัดไปจากคิว
+        """
+        return self.queue.get()
 
     async def playTrack(self, track: wavelink.Playable, volume: int = 60):
+        """เล่นแทร็กที่กำหนดพร้อมระดับเสียงที่เลือกได้
+        
+        Args:
+            track (wavelink.Playable): แทร็กที่ต้องการเล่น
+            volume (int): ระดับเสียง (ค่าเริ่มต้นคือ 60)
+        
+        Raises:
+            ValueError: ถ้าแทร็กเป็น None
+            RuntimeError: ถ้าผู้เล่นไม่เชื่อมต่อกับช่องเสียง
+        """
         if track is None:
             raise ValueError("Track cannot be None")
         
