@@ -12,8 +12,6 @@ class Nanao_Player(wavelink.Player):
     def __init__(self, *args, guild: discord.Guild, **kwargs):
         super().__init__(*args, **kwargs)
         self._guild = guild
-        self.voice_channel = None
-        self._queue_mode = RepeatMode.NORMAL
         self._filters = self.create_filters()
         self._voice = Voice(self)
         self._nightcore = Nightcore(self)
@@ -125,7 +123,7 @@ class Nanao_Player(wavelink.Player):
             RuntimeError: หากจำนวนเพลงในคิวมีน้อยกว่า 2
         """
         self._check_queue_length()
-        self._queue_mode = mode
+        self.queue.mode = mode
 
     @property
     def queue_mode(self):
@@ -134,7 +132,7 @@ class Nanao_Player(wavelink.Player):
         Returns:
             RepeatMode: โหมดการเล่นซ้ำปัจจุบัน
         """
-        return self._queue_mode
+        return self.queue.mode
     
     @property
     def voice(self):

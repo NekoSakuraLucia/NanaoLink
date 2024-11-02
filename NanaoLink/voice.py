@@ -24,6 +24,7 @@ class Voice:
             player: อินสแตนซ์ของ player ที่จะใช้ในการจัดการการเชื่อมต่อเสียง
         """
         self.player = player
+        self.voice_channel = None
 
     async def createPlayer(
         self,
@@ -66,13 +67,16 @@ class Voice:
         if not voice_channel:
             raise AttributeError("ผู้ใช้ไม่ได้เชื่อมต่อกับช่องเสียง.")
         
-        try:
-            player = await voice_channel.connect(
-                cls=cls,
-                self_deaf=self_deaf,
-                self_mute=self_mute,
-                reconnect=reconnect
-            )
-            return player
-        except Exception as e:
-            raise RuntimeError(f"ไม่สามารถสร้าง player ได้: {str(e)}")
+        player: wavelink.Player | None = source.guild.voice_client
+        if not player or not player.connected:
+            try:
+                player = await voice_channel.connect(
+                    cls=cls,
+                    self_deaf=self_deaf,
+                    self_mute=self_mute,
+                    reconnect=reconnect
+                )
+            except Exception as e:
+                raise RuntimeError(f"เกิดข้อผิดพลาดในการเชื่อมต่อกับช่องเสียง: {str(e)}")
+            
+        return player
