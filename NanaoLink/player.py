@@ -1,19 +1,12 @@
-import discord.ext.commands
 import wavelink
-import discord
 from typing import Optional
 from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo, SlowDown, Rotation
-from .voice import Voice
 from .enums import RepeatMode
 
-import discord.ext
-
 class Nanao_Player(wavelink.Player):
-    def __init__(self, *args, guild: discord.Guild, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._guild = guild
         self._filters = self.create_filters()
-        self._voice = Voice(self)
         self._nightcore = Nightcore(self)
         self._karaoke = Karaoke(self)
         self._lowpass = LowPass(self)
@@ -21,14 +14,6 @@ class Nanao_Player(wavelink.Player):
         self._slowdown = SlowDown(self)
         self._rotation = Rotation(self)
         self._distortion = Distortion(self)
-
-    @property
-    def guild(self):
-        """
-        Property สำหรับการเข้าถึงข้อมูล guild
-        และค่าค่าข้อมูล guild ที่ถูกเก็บไว้ใน _guild
-        """
-        return self._guild
     
     @property
     def filters(self):
@@ -133,13 +118,6 @@ class Nanao_Player(wavelink.Player):
             RepeatMode: โหมดการเล่นซ้ำปัจจุบัน
         """
         return self.queue.mode
-    
-    @property
-    def voice(self):
-        """
-        Property สำหรับการสร้าง player เกี่ยวกับช่องเสียง
-        """
-        return self._voice
     
     async def TrackSearch(self, query: str):
         tracks: wavelink.Playable = await wavelink.Playable.search(query)
