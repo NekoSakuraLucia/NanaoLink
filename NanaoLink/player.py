@@ -1,6 +1,6 @@
 import wavelink
 from typing import Optional
-from .filters import Nightcore, Karaoke, LowPass, Distortion, Termolo, SlowDown, Rotation
+from .filters import *
 from .enums import RepeatMode
 
 class Nanao_Player(wavelink.Player):
@@ -14,6 +14,7 @@ class Nanao_Player(wavelink.Player):
         self._slowdown = SlowDown(self)
         self._rotation = Rotation(self)
         self._distortion = Distortion(self)
+        self._vibrato = Vibrato(self)
     
     @property
     def filters(self):
@@ -78,6 +79,14 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า Rotation ที่ถูกสร้างจากผู้เล่นนี้ 
         """
         return self._rotation
+    
+    @property
+    def vibrato(self):
+        """
+        Property สำหรับสร้างอ็อบเจกต์ Vibrato 
+        และคืนค่า Vibrato ที่ถูกสร้างจากผู้เล่นนี้ 
+        """
+        return self._vibrato
     
     def create_filters(self):
         """ 

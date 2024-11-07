@@ -212,3 +212,31 @@ class Rotation:
         filters: wavelink.Filters = self.player.filters
         filters.rotation.set(rotation_hz=rotation_hz)
         await self.player.set_filters(filters)
+
+class Vibrato:
+    """
+    Class สำหรับจัดการฟิลเตอร์ Vibrato
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Vibrato
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ Vibrato
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+    
+    async def set(self, frequency: float = 6.0, depth: float = 0.4):
+        """
+        ตั้งค่าฟิลเตอร์สำหรับการหมุนเสียง Vibrato
+
+        ฟังก์ชันนี้จะปรับความถี่การหมุนของเสียงตามที่ระบุ
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ของผู้เล่น
+        
+        Args:
+            frequency (float): ความถี่การสั่นของเสียง (ค่าเริ่มต้น 6.0)
+            depth (float): ความลึกของการสั้น (ค่าเริ่มต้น 042)    
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.vibrato.set(frequency=frequency, depth=depth)
+        await self.player.set_filters(filters)
