@@ -235,7 +235,7 @@ class Vibrato:
         
         Args:
             frequency (float): ความถี่การสั่นของเสียง (ค่าเริ่มต้น 6.0)
-            depth (float): ความลึกของการสั้น (ค่าเริ่มต้น 042)    
+            depth (float): ความลึกของการสั้น (ค่าเริ่มต้น 0.4)    
         """
         filters: wavelink.Filters = self.player.filters
         filters.vibrato.set(frequency=frequency, depth=depth)
