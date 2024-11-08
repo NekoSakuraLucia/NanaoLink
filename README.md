@@ -17,6 +17,7 @@ player: Optional[Nanao_Player] = ctx.voice_client
 | wavelink.Player | player.QueueGet() หรือ player.playTrack(track, volume=80) |
 | wavelink.Playable | player.TrackSearch("เพลง") |
 | wavelink.Filters | player.nightcore.set() หรือ player.karaoke.set() และอื่นๆ เลือกดูได้ |
+| wavelink.QueueMode | player.set_repeat.normal() หรือ player.set_repeat.loop() และ player.set_repeat.loop_all() |
 
 โดยปัจจุบันยังมีแค่สามอย่างใน อนาคตอาจเพิ่มมาอีก อาจต้องรอก่อน
 
@@ -37,5 +38,6 @@ player: Optional[Nanao_Player] = ctx.voice_client
 | wavelink.Player | player.QueueGet() or player.playTrack(track, volume=80) |
 | wavelink.Playable | player.TrackSearch("song") |
 | wavelink.Filters | player.nightcore.set() or player.karaoke.set() and others. You can choose to see |
+| wavelink.QueueMode | player.set_repeat.normal() or player.set_repeat.loop() and player.set_repeat.loop_all() |
 
 Currently, there are only three things in the future. May add more. May have to wait.
