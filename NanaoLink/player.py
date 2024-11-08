@@ -1,7 +1,6 @@
 import wavelink
 from typing import Optional
 from .filters import *
-from .enums import RepeatMode
 
 class Nanao_Player(wavelink.Player):
     def __init__(self, *args, **kwargs):
@@ -107,25 +106,53 @@ class Nanao_Player(wavelink.Player):
         if self.queue.count < 2:
             raise RuntimeError("ไม่สามารถตั้งค่าโหมดเล่นซ้ำได้ เพลงในคิวไม่เพียงพอ")
     
-    def set_repeat(self, mode: RepeatMode):
-        """ตั้งค่าโหมดการเล่นซ้ำสำหรับเพลง
-        
-        Args:
-            mode (RepeatMode): โหมดการเล่นซ้ำที่ต้องการตั้งค่า (CURRENT, NORMAL, QUEUE)
-        
-        Raises:
-            RuntimeError: หากจำนวนเพลงในคิวมีน้อยกว่า 2
-        """
+    @property
+    def set_repeat(self):
+        """คืนค่า object สำหรับการตั้งค่าโหมดการเล่นซ้ำ"""
         self._check_queue_length()
-        self.queue.mode = mode
+        return self
+    
+    def loop(self):
+        """
+        ตั้งค่าให้เล่นเพลงปัจจุบันซ้ำ (Loop Current)
+
+        ฟังก์ชันนี้จะเปลี่ยนโหมดการเล่นของผู้เล่น (player) ให้เล่นเพลงที่กำลังเล่นอยู่ในขณะนี้ซ้ำ
+        โดยตั้งค่า `queue.mode` ให้เป็น `wavelink.QueueMode.loop` ซึ่งจะทำให้เพลงปัจจุบันในคิวเล่นซ้ำจนกว่าจะมีการหยุดหรือเปลี่ยนเพลงใหม่ (แต่ก่อนจะใช้ได้ต้องคิวเพลงไม่น้อยกว่า 2 เท่านั้น)
+
+        Note:
+            โหมดนี้ใช้สำหรับการเล่นเพลงเดิมที่กำลังเล่นอยู่ในคิวซ้ำโดยไม่ข้ามไปเพลงถัดไป
+        """
+        self.queue.mode = wavelink.QueueMode.loop
+
+    def normal(self):
+        """
+        ตั้งค่าให้ไม่เล่นเพลงซ้ำ (Normal Mode)
+
+        ฟังก์ชันนี้จะตั้งค่าโหมดการเล่นให้เป็นโหมดปกติ (ไม่เล่นซ้ำ) โดยการเปลี่ยนค่า `queue.mode` 
+        ให้เป็น `wavelink.QueueMode.normal` ซึ่งหมายความว่าเมื่อเพลงปัจจุบันจบลง เพลงจะข้ามไปเล่นเพลงถัดไปในคิว
+        โดยไม่ทำการเล่นซ้ำเพลงใด ๆ
+
+        Note:
+            โหมดนี้ใช้สำหรับการเล่นเพลงตามลำดับปกติในคิวโดยไม่ทำการลูป
+        """
+        self.queue.mode = wavelink.QueueMode.normal
+    
+    def loop_all(self):
+        """
+        ตั้งค่าให้เล่นทุกเพลงในคิวซ้ำ (Loop All)
+
+        ฟังก์ชันนี้จะตั้งค่าโหมดการเล่นของเพลงให้เล่นทุกเพลงในคิวซ้ำ โดยการตั้งค่า `queue.mode`
+        ให้เป็น `wavelink.QueueMode.loop_all` ซึ่งหมายความว่าเมื่อเพลงในคิวจบลง เพลงจะเริ่มเล่นเพลงแรกในคิวซ้ำ
+        และจะเล่นซ้ำทุกเพลงในคิวไปเรื่อย ๆ จนกว่าจะมีการหยุดหรือเปลี่ยนโหมด
+
+        Note:
+            โหมดนี้ใช้สำหรับการลูปทั้งหมดในคิว โดยไม่ข้ามเพลงจนกว่าเราจะหยุดหรือเปลี่ยนโหมด
+        """
+        self.queue.mode = wavelink.QueueMode.loop_all
 
     @property
     def queue_mode(self):
-        """ส่งคืนโหมดคิวปัจจุบันของเครื่องเล่น
-        
-        Returns:
-            RepeatMode: โหมดการเล่นซ้ำปัจจุบัน
-        """
+        """ส่งคืนโหมดคิวปัจจุบันของโหมดคิวเพลง"""
         return self.queue.mode
     
     async def TrackSearch(self, query: str):
