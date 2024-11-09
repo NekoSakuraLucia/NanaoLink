@@ -2,12 +2,14 @@ import wavelink
 from typing import Optional
 from .filters import *
 from .Repeat import RepeatMode
+from .autoplay import AutoplayMode
 
 class Nanao_Player(wavelink.Player):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._filters = self.create_filters()
         self._repeatMode = RepeatMode(self)
+        self._autoplayMode = AutoplayMode(self)
         self._nightcore = Nightcore(self)
         self._karaoke = Karaoke(self)
         self._lowpass = LowPass(self)
@@ -119,6 +121,15 @@ class Nanao_Player(wavelink.Player):
         """ส่งคืนโหมดคิวปัจจุบันของโหมดคิวเพลง"""
         return self.queue.mode
     
+    @property
+    def auto_play(self):
+        """
+        ได้รับค่า autoplay mode ที่ถูกตั้งค่าไว้ใน player
+
+        ค่า _autoplayMode ที่เก็บสถานะการเล่นอัตโนมัติ
+        """
+        return self._autoplayMode
+    
     async def TrackSearch(self, query: str):
         """
         ค้นหาแทร็กตามคำค้นหาที่กำหนด
@@ -168,5 +179,4 @@ class Nanao_Player(wavelink.Player):
         if player is None or not player.connected:
             raise RuntimeError("Player is not connected to a voice channel")
         
-        await self.play(track)
-        await player.set_volume(volume)
+        await self.play(track, volume=volume)
