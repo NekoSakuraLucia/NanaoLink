@@ -130,6 +130,28 @@ class Nanao_Player(wavelink.Player):
         """
         return self._autoplayMode
     
+    async def toggle(self, play: bool):
+        """
+        เปลี่ยนสถานะของเพลงให้เล่นหรือหยุดตามที่กำหนด\n
+        การทำงานของ toggle นี้จะคล้ายกับ `player.pause(True หรือ False)`
+
+        :param play: ค่าของ `True` หมายถึงต้องการให้เล่นเพลงต่อ\n
+                     ค่าของ `False` หมายถึงต้องการให้หยุดเพลง
+        :raises RuntimeError: หากเพลงอยู่ในสถานะที่ไม่สามารถทำการสลับสถานะได้\n
+                               - ถ้าเพลงกำลังเล่นแล้วและพยายามเล่นอีกครั้ง\n
+                               - ถ้าเพลงหยุดแล้วและพยายามหยุดอีกครั้ง
+        """
+        if play:
+            if self.paused:
+                await self.pause(False)
+            else:
+                raise RuntimeError("Already playing.")
+        else:
+            if not self.paused: 
+                await self.pause(True)
+            else:
+                raise RuntimeError("Already paused.")
+    
     async def TrackSearch(self, query: str):
         """
         ค้นหาแทร็กตามคำค้นหาที่กำหนด
