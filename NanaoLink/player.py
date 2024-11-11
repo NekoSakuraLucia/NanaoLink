@@ -172,12 +172,40 @@ class Nanao_Player(wavelink.Player):
         await self.seek(milliseconds)
     
     async def increase_volume(self, step: int = 10):
+        """
+        เพิ่มระดับเสียงที่ละขั้น (ค่าเริ่มต้นคือ 10%)
+
+        Parameters:
+            step (int): จำนวนเปอร์เซ็นต์ที่ต้องการเพิ่มระดับเสียง
+
+        Raises:
+            RuntimeError: หากระดับเสียงเกิน 100%
+        """
         # ดึงระดับเสียงปัจจุบันแล้วเพิ่มตาม step ที่กำหนด
         current_volume = self.volume
         new_volume = min(current_volume + step, 100) # จำกัดระดับเสียงสูงสุดที่ 100%
 
         if current_volume == 100:
             raise RuntimeError(f"ไม่สามารถเพิ่มระดับเสียงได้ เนื่องจากระดับเสียงปัจจุบันคือ {current_volume}%")
+
+        await self.set_volume(new_volume)
+
+    async def decrease_volume(self, step: int = 10):
+        """
+        ลดระดับเสียงทีละขั้น (ค่าเริ่มต้นคือ 10%)
+
+        Parameters:
+            step (int): จำนวนเปอร์เซ็นต์ที่ต้องการลดระดับเสียง
+
+        Raises:
+            RuntimeError: หากระดับเสียงต่ำกว่า 0%
+        """
+        # ดึงระดับเสียงปัจจุบันแล้วลดตาม step ที่กำหนด
+        current_volume = self.volume
+        new_volume = max(current_volume - step, 0) # จำกัดระดับเสียงต่ำสุดที่ 0%
+
+        if current_volume == 0:
+            raise RuntimeError(f"ไม่สามารถลดระดับเสียงได้ เนื่องจากระดับเสียงปัจจุบันคือ {current_volume}%")
 
         await self.set_volume(new_volume)
     
