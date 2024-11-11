@@ -99,7 +99,17 @@ class Distortion:
         """
         self.player = player
     
-    async def set(self, sin_offset=0.05, sin_scale=0.2, cos_offset=0.05, cos_scale=0.2, tan_offset=0.0, tan_scale=0.1, offset=0.0, scale=0.5):
+    async def set(
+            self, 
+            sin_offset=0.05, 
+            sin_scale=0.2, 
+            cos_offset=0.05, 
+            cos_scale=0.2, 
+            tan_offset=0.0, 
+            tan_scale=0.1, 
+            offset=0.0, 
+            scale=0.5
+        ):
         """
         ตั้งค่าฟิลเตอร์ Distortion สำหรับเสียง
 
@@ -239,4 +249,46 @@ class Vibrato:
         """
         filters: wavelink.Filters = self.player.filters
         filters.vibrato.set(frequency=frequency, depth=depth)
+        await self.player.set_filters(filters)
+
+class ChannelMix:
+    """
+    Class สำหรับจัดการฟิลเตอร์ ChannelMix
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ ChannelMix
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ ChannelMix
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+
+    async def set(
+            self, 
+            left_to_left: float = 0.7, 
+            left_to_right: float = 0.2, 
+            right_to_left: float = 0.2, 
+            right_to_right: float = 0.7
+        ):
+        """
+        ตั้งค่าฟิลเตอร์ ChannelMix สำหรับการผสมเสียงระหว่างช่องซ้ายและขวา
+
+        ฟังก์ชันนี้จะปรับการผสมเสียงจากช่องซ้ายไปช่องขวาและจากช่องขวาไปช่องซ้าย\n
+        โดยใช้ค่าที่ระบุในพารามิเตอร์ และเรียกใช้ฟังก์ชัน set_filters\n
+        เพื่ออัปเดตฟิลเตอร์ของผู้เล่น
+
+        Args:
+            left_to_left (float): ค่าที่ผสมเสียงจากช่องซ้ายไปช่องซ้าย (ค่าเริ่มต้น 0.7)
+            left_to_right (float): ค่าที่ผสมเสียงจากช่องซ้ายไปช่องขวา (ค่าเริ่มต้น 0.2)
+            right_to_left (float): ค่าที่ผสมเสียงจากช่องขวาไปช่องซ้าย (ค่าเริ่มต้น 0.2)
+            right_to_right (float): ค่าที่ผสมเสียงจากช่องขวาไปช่องขวา (ค่าเริ่มต้น 0.7)
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.channel_mix.set(
+            left_to_left=left_to_left,
+            left_to_right=left_to_right,
+            right_to_left=right_to_left,
+            right_to_right=right_to_right
+        )
         await self.player.set_filters(filters)
