@@ -1,4 +1,5 @@
 import wavelink
+import re
 from typing import Optional
 from .filters import *
 from .Repeat import RepeatMode
@@ -151,6 +152,24 @@ class Nanao_Player(wavelink.Player):
                 await self.pause(True)
             else:
                 raise RuntimeError("Already paused.")
+            
+    async def seek_seconds(self, time_str: str):
+        """
+        แปลงเวลาในรูปแบบ 'นาที:วินาที' ให้เป็นหน่วยมิลลิวินาที และเรียกใช้ฟังก์ชัน seek() เพื่อเลื่อนไปยังตำแหน่งที่กำหนด
+
+        Parameters:
+            time_str (str): เวลาในรูปแบบ 'นาที:วินาที' เช่น '1:02' (1 นาที 2 วินาที)
+
+        Raises:
+            RuntimeError: หากรูปแบบเวลาไม่ถูกต้อง (ไม่ได้อยู่ในรูปแบบ 'นาที:วินาที')
+        """
+        match = re.match(r"(\d+):(\d+)", time_str)
+        if not match:
+            raise RuntimeError("รูปแบบเวลาไม่ถูกต้อง ควรใช้รูปแบบนาที:วินาที เช่น 1:02")
+        
+        minutes, seconds = int(match.group(1)), int(match.group(2))
+        milliseconds = (minutes * 60 + seconds) * 1000
+        await self.seek(milliseconds)
     
     async def TrackSearch(self, query: str):
         """
