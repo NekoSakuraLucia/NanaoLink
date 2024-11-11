@@ -171,6 +171,16 @@ class Nanao_Player(wavelink.Player):
         milliseconds = (minutes * 60 + seconds) * 1000
         await self.seek(milliseconds)
     
+    async def increase_volume(self, step: int = 10):
+        # ดึงระดับเสียงปัจจุบันแล้วเพิ่มตาม step ที่กำหนด
+        current_volume = self.volume
+        new_volume = min(current_volume + step, 100) # จำกัดระดับเสียงสูงสุดที่ 100%
+
+        if current_volume == 100:
+            raise RuntimeError(f"ไม่สามารถเพิ่มระดับเสียงได้ เนื่องจากระดับเสียงปัจจุบันคือ {current_volume}%")
+
+        await self.set_volume(new_volume)
+    
     async def TrackSearch(self, query: str):
         """
         ค้นหาแทร็กตามคำค้นหาที่กำหนด
