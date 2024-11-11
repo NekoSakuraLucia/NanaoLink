@@ -292,3 +292,47 @@ class ChannelMix:
             right_to_right=right_to_right
         )
         await self.player.set_filters(filters)
+
+class Equalizer:
+    """
+    Class สำหรับจัดการฟิลเตอร์ Equalizer
+    ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Equalizer
+    """
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ Equalizer
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+
+    async def set(self, level: float = 0.5):
+        """
+        ตั้งค่าฟิลเตอร์ Equalizer สำหรับการเพิ่มเสียงเบส (Bass Boost) แบบพอดี
+
+        ฟังก์ชันนี้จะปรับค่า Equalizer เพื่อเพิ่มเสียงเบสตามค่าระดับที่ระบุ\n
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ของผู้เล่น
+
+        Args:
+            level (float): ระดับของ Bass Boost (ค่าเริ่มต้น 0.5, สูงสุดที่ 1.0)
+        """
+        bands = [
+            {"band": 0, "gain": level},  # Band 0 (เบส) เพิ่มค่าความแรงตาม level
+            {"band": 1, "gain": level * 0.6},  # Band 1 (เบสต่ำ) เพิ่มค่าความแรงในระดับพอดี
+            {"band": 2, "gain": level * 0.3},  # Band 2 (ต่ำ) เสริมเล็กน้อย
+            {"band": 3, "gain": 0.0},  # Band 3, 4, 5 ไม่มีการปรับ
+            {"band": 4, "gain": 0.0},
+            {"band": 5, "gain": 0.0},
+            {"band": 6, "gain": 0.0},
+            {"band": 7, "gain": 0.0},
+            {"band": 8, "gain": 0.0},
+            {"band": 9, "gain": 0.0},
+            {"band": 10, "gain": 0.0},
+            {"band": 11, "gain": 0.0},
+            {"band": 12, "gain": 0.0},
+            {"band": 13, "gain": 0.0},
+            {"band": 14, "gain": 0.0}
+        ]
+        filters: wavelink.Filters = self.player.filters
+        filters.equalizer.set(bands=bands)
+        await self.player.set_filters(filters)

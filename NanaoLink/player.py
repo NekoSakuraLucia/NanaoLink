@@ -20,6 +20,7 @@ class Nanao_Player(wavelink.Player):
         self._distortion = Distortion(self)
         self._vibrato = Vibrato(self)
         self._channelmix = ChannelMix(self)
+        self._equalizer = Equalizer(self)
     
     @property
     def filters(self):
@@ -100,6 +101,14 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า ChannelMix ที่ถูกสร้างจากผู้เล่นนี้ 
         """
         return self._channelmix
+    
+    @property
+    def equalizer(self):
+        """
+        Property สำหรับสร้างอ็อบเจกต์ Equalizer
+        และคืนค่า Equalizer ที่ถูกสร้างจากผู้เล่นนี้
+        """
+        return self._equalizer
     
     def create_filters(self):
         """ 
