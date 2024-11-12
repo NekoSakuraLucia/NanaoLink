@@ -4,12 +4,14 @@ from typing import Optional
 from .filters import *
 from .Repeat import RepeatMode
 from .autoplay import AutoplayMode
+from .infoTrack import InfoTrack, InfoTrack_Class
 
 class Nanao_Player(wavelink.Player):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._filters = self.create_filters()
         self._repeatMode = RepeatMode(self)
+        self.current_track: InfoTrack_Class = None
         self._autoplayMode = AutoplayMode(self)
         self._nightcore = Nightcore(self)
         self._karaoke = Karaoke(self)
@@ -226,6 +228,35 @@ class Nanao_Player(wavelink.Player):
             raise RuntimeError(f"ไม่สามารถลดระดับเสียงได้ เนื่องจากระดับเสียงปัจจุบันคือ {current_volume}%")
 
         await self.set_volume(new_volume)
+
+    def set_current_track(self, track: InfoTrack_Class):
+        """
+        ตั้งค่าแทร็กที่กำลังเล่นอยู่
+
+        ใช้ฟังก์ชันนี้ในการตั้งค่าแทร็กที่กำลังเล่น
+        ซึ่งจะอัปเดตตัวแปร current_track ที่เก็บแทร็กนั้นๆ
+        Args:
+            track (InfoTrack_Class): แทร็กที่กำลังเล่น
+        """
+        self.current_track = track
+    
+    @property
+    def info(self) -> InfoTrack:
+        """
+        คืนค่าข้อมูลของแทร็กที่กำลังเล่น
+
+        เมื่อเรียกใช้ property นี้, ระบบจะตรวจสอบว่ามีแทร็กที่กำลังเล่นหรือไม่
+        ถ้ามี, จะคืนข้อมูลของแทร็กนั้นๆ ถ้าไม่มีแทร็กที่กำลังเล่น จะเกิดข้อผิดพลาด ValueError
+
+        Returns:
+            InfoTrack: ข้อมูลของแทร็กที่กำลังเล่น
+
+        Raises:
+            ValueError: ถ้าไม่มีแทร็กที่กำลังเล่น
+        """
+        if not self.current_track:
+            raise ValueError("No Track is currently playing.")
+        return self.current_track.info
     
     async def TrackSearch(self, query: str):
         """
@@ -243,10 +274,26 @@ class Nanao_Player(wavelink.Player):
         
         if isinstance(tracks, wavelink.Playlist):
             await self.queue.put_wait(tracks)
+            for track in tracks.tracks:
+                track_info = InfoTrack_Class(
+                    title=track.title,
+                    album=getattr(track, "album", "Unknow Album"),
+                    artwork=getattr(track, "artwork", ""),
+                    author=track.author,
+                    data=track.raw_data
+                )
             return tracks
         else:
             track: wavelink.Playable = tracks[0]
+            track_info = InfoTrack_Class(
+                title=track.title,
+                album=getattr(track, "album", "Unknow Album"),
+                artwork=getattr(track, "artwork", ""),
+                author=track.author,
+                data=track.raw_data
+            )
             await self.queue.put_wait(track)
+            self.set_current_track(track_info)
             return [track]
         
     def QueueGet(self):
