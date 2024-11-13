@@ -1,10 +1,12 @@
 import wavelink
 
+
 class Karaoke:
     """
     Class สำหรับจัดการฟิลเตอร์ Karaoke
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ karaoke
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ Karaoke
@@ -27,14 +29,21 @@ class Karaoke:
             filter_width (int): ความกว้างของฟิลเตอร์ (ค่าเริ่มต้นคือ 100)
         """
         filters: wavelink.Filters = self.player.filters
-        filters.karaoke.set(level=level, mono_level=mono_level, filter_band=filter_band, filter_width=filter_width)
+        filters.karaoke.set(
+            level=level,
+            mono_level=mono_level,
+            filter_band=filter_band,
+            filter_width=filter_width,
+        )
         await self.player.set_filters(filters)
+
 
 class Nightcore:
     """
     Class สำหรับจัดการฟิลเตอร์ Nightcore
     ซึ่งใช้เพื่อปรับความเร็วและเสียงของเพลง
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ Nightcore
@@ -42,7 +51,7 @@ class Nightcore:
             player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
         """
         self.player = player
-    
+
     async def set(self, speed=1.2, pitch=1.2, rate: float = 1):
         """
         ตั้งค่าฟิลเตอร์ timescale สำหรับ Nightcore
@@ -59,11 +68,13 @@ class Nightcore:
         filters.timescale.set(speed=speed, pitch=pitch, rate=rate)
         await self.player.set_filters(filters)
 
+
 class LowPass:
     """
     Class สำหรับจัดการฟิลเตอร์ LowPass
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ LowPass
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ LowPass
@@ -86,11 +97,13 @@ class LowPass:
         filters.low_pass.set(smoothing=smoothing)
         await self.player.set_filters(filters)
 
+
 class Distortion:
     """
     Class สำหรับจัดการฟิลเตอร์ Distortion
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Distortion
     """
+
     def __init__(self, player: wavelink.Player):
         """
         กำหนดค่าเริ่มต้นให้กับ Distortion
@@ -98,18 +111,18 @@ class Distortion:
             player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
         """
         self.player = player
-    
+
     async def set(
-            self, 
-            sin_offset=0.05, 
-            sin_scale=0.2, 
-            cos_offset=0.05, 
-            cos_scale=0.2, 
-            tan_offset=0.0, 
-            tan_scale=0.1, 
-            offset=0.0, 
-            scale=0.5
-        ):
+        self,
+        sin_offset=0.05,
+        sin_scale=0.2,
+        cos_offset=0.05,
+        cos_scale=0.2,
+        tan_offset=0.0,
+        tan_scale=0.1,
+        offset=0.0,
+        scale=0.5,
+    ):
         """
         ตั้งค่าฟิลเตอร์ Distortion สำหรับเสียง
 
@@ -135,15 +148,17 @@ class Distortion:
             tan_offset=tan_offset,
             tan_scale=tan_scale,
             offset=offset,
-            scale=scale
+            scale=scale,
         )
         await self.player.set_filters(filters)
+
 
 class Termolo:
     """
     Class สำหรับจัดการฟิลเตอร์ Termolo
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Termolo
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ Termolo
@@ -167,11 +182,13 @@ class Termolo:
         filters.tremolo.set(frequency=frequency, depth=depth)
         await self.player.set_filters(filters)
 
+
 class SlowDown:
     """
     Class สำหรับจัดการฟิลเตอร์ SlowDown
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ SlowDown
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ SlowDown
@@ -179,7 +196,7 @@ class SlowDown:
             player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
         """
         self.player = player
-    
+
     async def set(self, speed=0.8, pitch=0.9, rate: float = 1):
         """
         ตั้งค่าฟิลเตอร์ timescale สำหรับ SlowDown
@@ -196,11 +213,13 @@ class SlowDown:
         filters.timescale.set(speed=speed, pitch=pitch, rate=rate)
         await self.player.set_filters(filters)
 
+
 class Rotation:
     """
     Class สำหรับจัดการฟิลเตอร์ Rotation
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Rotation
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ Rotation
@@ -223,11 +242,13 @@ class Rotation:
         filters.rotation.set(rotation_hz=rotation_hz)
         await self.player.set_filters(filters)
 
+
 class Vibrato:
     """
     Class สำหรับจัดการฟิลเตอร์ Vibrato
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Vibrato
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ Vibrato
@@ -235,27 +256,29 @@ class Vibrato:
             player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
         """
         self.player = player
-    
+
     async def set(self, frequency: float = 6.0, depth: float = 0.4):
         """
         ตั้งค่าฟิลเตอร์สำหรับการหมุนเสียง Vibrato
 
         ฟังก์ชันนี้จะปรับความถี่การหมุนของเสียงตามที่ระบุ
         และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ของผู้เล่น
-        
+
         Args:
             frequency (float): ความถี่การสั่นของเสียง (ค่าเริ่มต้น 6.0)
-            depth (float): ความลึกของการสั้น (ค่าเริ่มต้น 0.4)    
+            depth (float): ความลึกของการสั้น (ค่าเริ่มต้น 0.4)
         """
         filters: wavelink.Filters = self.player.filters
         filters.vibrato.set(frequency=frequency, depth=depth)
         await self.player.set_filters(filters)
+
 
 class ChannelMix:
     """
     Class สำหรับจัดการฟิลเตอร์ ChannelMix
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ ChannelMix
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ ChannelMix
@@ -265,12 +288,12 @@ class ChannelMix:
         self.player = player
 
     async def set(
-            self, 
-            left_to_left: float = 0.7, 
-            left_to_right: float = 0.2, 
-            right_to_left: float = 0.2, 
-            right_to_right: float = 0.7
-        ):
+        self,
+        left_to_left: float = 0.7,
+        left_to_right: float = 0.2,
+        right_to_left: float = 0.2,
+        right_to_right: float = 0.7,
+    ):
         """
         ตั้งค่าฟิลเตอร์ ChannelMix สำหรับการผสมเสียงระหว่างช่องซ้ายและขวา
 
@@ -289,15 +312,17 @@ class ChannelMix:
             left_to_left=left_to_left,
             left_to_right=left_to_right,
             right_to_left=right_to_left,
-            right_to_right=right_to_right
+            right_to_right=right_to_right,
         )
         await self.player.set_filters(filters)
+
 
 class Equalizer:
     """
     Class สำหรับจัดการฟิลเตอร์ Equalizer
     ซึ่งใช้เพื่อปรับค่าฟิลเตอร์ Equalizer
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ Equalizer
@@ -331,7 +356,7 @@ class Equalizer:
             {"band": 11, "gain": 0.0},
             {"band": 12, "gain": 0.0},
             {"band": 13, "gain": 0.0},
-            {"band": 14, "gain": 0.0}
+            {"band": 14, "gain": 0.0},
         ]
         filters: wavelink.Filters = self.player.filters
         filters.equalizer.set(bands=bands)

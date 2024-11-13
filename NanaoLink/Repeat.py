@@ -1,10 +1,12 @@
 import wavelink
 
+
 class RepeatMode:
     """
     Class สำหรับจัดการวนเพลงซ้ำ RepeatMode
     ซึ่งจะใช้สำหรับปรับค่าวนเพลงต่างๆ
     """
+
     def __init__(self, player: wavelink.Player) -> None:
         """
         กำหนดค่าเริ่มต้นให้กับ RepeatMode
@@ -29,7 +31,7 @@ class RepeatMode:
         """
         ตั้งค่าให้ไม่เล่นเพลงซ้ำ (Normal Mode)
 
-        ฟังก์ชันนี้จะตั้งค่าโหมดการเล่นให้เป็นโหมดปกติ (ไม่เล่นซ้ำ) โดยการเปลี่ยนค่า `queue.mode` 
+        ฟังก์ชันนี้จะตั้งค่าโหมดการเล่นให้เป็นโหมดปกติ (ไม่เล่นซ้ำ) โดยการเปลี่ยนค่า `queue.mode`
         ให้เป็น `wavelink.QueueMode.normal` ซึ่งหมายความว่าเมื่อเพลงปัจจุบันจบลง เพลงจะข้ามไปเล่นเพลงถัดไปในคิว
         โดยไม่ทำการเล่นซ้ำเพลงใด ๆ
 
@@ -37,7 +39,7 @@ class RepeatMode:
             โหมดนี้ใช้สำหรับการเล่นเพลงตามลำดับปกติในคิวโดยไม่ทำการลูป
         """
         self.player.queue.mode = wavelink.QueueMode.normal
-    
+
     def loop_all(self):
         """
         ตั้งค่าให้เล่นทุกเพลงในคิวซ้ำ (Loop All)

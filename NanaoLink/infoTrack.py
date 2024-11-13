@@ -2,6 +2,7 @@ import wavelink
 from dataclasses import dataclass
 from typing import Any
 
+
 @dataclass
 class InfoTrack:
     title: str
@@ -9,6 +10,7 @@ class InfoTrack:
     artist: str
     artwork: str
     author: str
+
 
 class InfoTrack_Class(wavelink.Playable):
     """
@@ -152,6 +154,6 @@ class InfoTrack_Class(wavelink.Playable):
                 album=self._album,
                 artist=self._author,  # ใช้ author หรือ artist ขึ้นอยู่กับความต้องการ
                 artwork=self._artwork,
-                author=self._author
+                author=self._author,
             )
         return self._info
