@@ -1,3 +1,5 @@
 /NanaoEnv
 __pycache__
 test.py
+dist
+NanaoLink.egg-info

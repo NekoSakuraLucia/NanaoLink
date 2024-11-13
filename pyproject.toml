@@ -2,17 +2,20 @@
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
+[project]
 name = "NanaoLink"
 version = "0.1.0"
 description = "แพ็กเกจ client สำหรับ lavalink ที่ปรับให้ใช้งานง่ายขึ้น"
-authors = ["NekoSakuraLucia"]
-license = "MIT"
+authors = [{ name = "NekoSakuraLucia" }]
+license = { text = "MIT" }
 readme = "README.md"
+dependencies = [
+    "python >= 3.10",
+    "wavelink"
+]
 
-[tool.setuptools.urls]
-repository = "https://github.com/NekoSakuraLucia/NanaoLink"
+[tool.setuptools]
+packages = ["NanaoLink"]
 
-[tool.setuptools.dependencies]
-python = "^3.10"
-wavelink = "*"
+[project.urls]
+repositroy = "https://github.com/NekoSakuraLucia/NanaoLink"
