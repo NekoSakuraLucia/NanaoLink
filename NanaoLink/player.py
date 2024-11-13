@@ -274,14 +274,14 @@ class Nanao_Player(wavelink.Player):
         
         if isinstance(tracks, wavelink.Playlist):
             await self.queue.put_wait(tracks)
-            for track in tracks.tracks:
-                track_info = InfoTrack_Class(
-                    title=track.title,
-                    album=getattr(track, "album", "Unknow Album"),
-                    artwork=getattr(track, "artwork", ""),
-                    author=track.author,
-                    data=track.raw_data
-                )
+            first_track_info = InfoTrack_Class(
+                title=tracks.tracks[0].title,
+                album=getattr(tracks.tracks[0], "album", "Unknow Album"),
+                artwork=getattr(tracks.tracks[0], "artwork", ""),
+                author=tracks.tracks[0].author,
+                data=tracks.tracks[0].raw_data
+            )
+            self.set_current_track(first_track_info)
             return tracks
         else:
             track: wavelink.Playable = tracks[0]
