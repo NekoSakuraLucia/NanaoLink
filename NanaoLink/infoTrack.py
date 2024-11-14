@@ -5,12 +5,33 @@ from typing import Any
 
 @dataclass
 class InfoTrack:
+    """
+    คลาสนี้เก็บข้อมูลเกี่ยวกับแทร็กเพลงที่มีคุณสมบัติที่จำเป็น\n
+    ในการแสดงข้อมูลเพลง\n
+    เช่น ชื่อเพลง, อัลบั้ม, ศิลปิน, ภาพปก,
+    ผู้แต่ง และระยะเวลา
+
+    Attributes:
+        title (str): ชื่อของเพลง
+        album (str): ชื่อของอัลบั้มที่เพลงนี้มาจาก
+        artist (str): ชื่อของศิลปินที่แสดงเพลงนี้
+        artwork (str): URL หรือข้อมูลของภาพปกเพลง
+        author (str): ผู้แต่งเพลง หรือผู้เขียนเนื้อเพลง
+        duration (int): ระยะเวลา (ในหน่วยวินาที) ของเพลง
+    """
+
     title: str
+    """ส่งชื่อ/ชื่อของแทร็กนี้"""
     album: str
+    """ส่งอัลบั้มสำหรับแทร็กนี้"""
     artist: str
+    """ส่งศิลปินสำหรับแทร็กนี้"""
     artwork: str
+    """ส่ง URL หรือข้อมูลของภาพปกเพลง"""
     author: str
+    """ส่งผู้แต่งเพลง หรือผู้เขียนเนื้อเพลง"""
     duration: int
+    """ส่งระยะเวลาทั้งหมดของเพลง (ในหน่วยวินาที)"""
 
 
 class InfoTrack_Class(wavelink.Playable):
@@ -38,7 +59,7 @@ class InfoTrack_Class(wavelink.Playable):
             artwork (str): URL ของภาพหน้าปก
             author (str): ชื่อผู้แต่งหรือศิลปิน
             data (Any): ข้อมูลดิบที่มาจาก Wavelink
-            duration (int): เวลาปัจจุบันของแทร็ก 
+            duration (int): เวลาปัจจุบันของแทร็ก
         """
         super().__init__(data)
         self._title = title
