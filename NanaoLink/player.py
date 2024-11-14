@@ -285,6 +285,7 @@ class Nanao_Player(wavelink.Player):
                 artwork=getattr(tracks.tracks[0], "artwork", ""),
                 author=tracks.tracks[0].author,
                 data=tracks.tracks[0].raw_data,
+                duration=tracks.tracks[0].length,
             )
             self.set_current_track(first_track_info)
             return tracks
@@ -296,6 +297,7 @@ class Nanao_Player(wavelink.Player):
                 artwork=getattr(track, "artwork", ""),
                 author=track.author,
                 data=track.raw_data,
+                duration=track.length,
             )
             await self.queue.put_wait(track)
             self.set_current_track(track_info)

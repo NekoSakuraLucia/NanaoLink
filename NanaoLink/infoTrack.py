@@ -10,16 +10,25 @@ class InfoTrack:
     artist: str
     artwork: str
     author: str
+    duration: int
 
 
 class InfoTrack_Class(wavelink.Playable):
     """
     คลาสสำหรับจัดการข้อมูลแทร็กเพลงที่ได้รับจาก Playable\n
     ซึ่งจะเก็บข้อมูลต่างๆ ที่เกี่ยวข้องกับแทร็กเพลง\n
-    เช่น ชื่อแทร็ก, อัลบั้ม, ศิลปิน, ภาพปก และข้อมูลดิบ
+    เช่น ชื่อแทร็ก, อัลบั้ม, ศิลปิน, ภาพปก, เวลาแทร็ก และข้อมูลดิบ
     """
 
-    def __init__(self, title: str, album: str, artwork: str, author: str, data: Any):
+    def __init__(
+        self,
+        title: str,
+        album: str,
+        artwork: str,
+        author: str,
+        duration: int,
+        data: Any,
+    ):
         """
         กำหนดค่าเริ่มต้นสำหรับข้อมูลแทร็กเพลง
 
@@ -29,12 +38,14 @@ class InfoTrack_Class(wavelink.Playable):
             artwork (str): URL ของภาพหน้าปก
             author (str): ชื่อผู้แต่งหรือศิลปิน
             data (Any): ข้อมูลดิบที่มาจาก Wavelink
+            duration (int): เวลาปัจจุบันของแทร็ก 
         """
         super().__init__(data)
         self._title = title
         self._album = album
         self._artwork = artwork
         self._author = author
+        self._duration = duration
         self.data = data
         self._info = None
 
@@ -135,6 +146,30 @@ class InfoTrack_Class(wavelink.Playable):
         self._author = value
 
     @property
+    def duration(self):
+        """
+        รับค่าเวลา (duration) ของแทร็ก
+
+        คืนค่าเวลาจากตัวแปร _duration ซึ่งถูกกำหนดใน constructor
+
+        Returns:
+            int: เวลาปัจจุบันของแทร็ก
+        """
+        return self._duration
+
+    @duration.setter
+    def duration(self, value: int):
+        """
+        ตั้งค่าให้กับเวลา (duration) ของแทร็ก
+
+        กำหนดชื่อเวลาใหม่ให้กับตัวแปร _duration
+
+        Args:
+            value (int): เวลาของเพลงที่ต้องการตั้งค่าใหม่
+        """
+        self._duration = value
+
+    @property
     def info(self) -> InfoTrack:
         """
         คืนค่าข้อมูลทั้งหมดของแทร็กในรูปแบบ InfoTrack
@@ -155,5 +190,6 @@ class InfoTrack_Class(wavelink.Playable):
                 artist=self._author,  # ใช้ author หรือ artist ขึ้นอยู่กับความต้องการ
                 artwork=self._artwork,
                 author=self._author,
+                duration=self._duration,
             )
         return self._info
