@@ -9,7 +9,7 @@ class InfoTrack:
     คลาสนี้เก็บข้อมูลเกี่ยวกับแทร็กเพลงที่มีคุณสมบัติที่จำเป็น\n
     ในการแสดงข้อมูลเพลง\n
     เช่น ชื่อเพลง, อัลบั้ม, ศิลปิน, ภาพปก,
-    ผู้แต่ง และระยะเวลา
+    ผู้แต่ง และระยะเวลา, แหล่งที่มา, ลิงก์ของแทร็ก
 
     Attributes:
         title (str): ชื่อของเพลง
@@ -17,7 +17,9 @@ class InfoTrack:
         artist (str): ชื่อของศิลปินที่แสดงเพลงนี้
         artwork (str): URL หรือข้อมูลของภาพปกเพลง
         author (str): ผู้แต่งเพลง หรือผู้เขียนเนื้อเพลง
-        duration (int): ระยะเวลา (ในหน่วยวินาที) ของเพลง
+        duration (int): ระยะเวลา (มิลลิวินาที) ของเพลง
+        uri (str): ลิงก์ URL ของแทร็กปัจจุบัน
+        source (str): แหล่งที่มาปัจจุบันของแทร็ก
     """
 
     title: str
@@ -31,14 +33,18 @@ class InfoTrack:
     author: str
     """ส่งผู้แต่งเพลง หรือผู้เขียนเนื้อเพลง"""
     duration: int
-    """ส่งระยะเวลาทั้งหมดของเพลง (ในหน่วยวินาที)"""
+    """ส่งระยะเวลาทั้งหมดของเพลง (มิลลิวินาที)"""
+    uri: str
+    """ส่งลิงก์ URL ของแทร็กปัจจุบัน"""
+    source: str
+    """ส่งแหล่งที่มาปัจจุบันของแทร็กเช่น Youtube หรือ Spotify"""
 
 
 class InfoTrack_Class(wavelink.Playable):
     """
     คลาสสำหรับจัดการข้อมูลแทร็กเพลงที่ได้รับจาก Playable\n
     ซึ่งจะเก็บข้อมูลต่างๆ ที่เกี่ยวข้องกับแทร็กเพลง\n
-    เช่น ชื่อแทร็ก, อัลบั้ม, ศิลปิน, ภาพปก, เวลาแทร็ก และข้อมูลดิบ
+    เช่น ชื่อแทร็ก, อัลบั้ม, ศิลปิน, ภาพปก, เวลาแทร็ก, แหล่งที่มา, ลิงก์ของแทร็ก และข้อมูลดิบ
     """
 
     def __init__(
@@ -48,6 +54,8 @@ class InfoTrack_Class(wavelink.Playable):
         artwork: str,
         author: str,
         duration: int,
+        uri: str,
+        source: str,
         data: Any,
     ):
         """
@@ -60,6 +68,8 @@ class InfoTrack_Class(wavelink.Playable):
             author (str): ชื่อผู้แต่งหรือศิลปิน
             data (Any): ข้อมูลดิบที่มาจาก Wavelink
             duration (int): เวลาปัจจุบันของแทร็ก
+            uri (str): ลิงก์ของแทร็กปัจจุบัน
+            source (str): แหล่งที่มาปัจจุบันของแทร็ก
         """
         super().__init__(data)
         self._title = title
@@ -67,6 +77,8 @@ class InfoTrack_Class(wavelink.Playable):
         self._artwork = artwork
         self._author = author
         self._duration = duration
+        self._uri = uri
+        self._source = source
         self.data = data
         self._info = None
 
@@ -191,12 +203,60 @@ class InfoTrack_Class(wavelink.Playable):
         self._duration = value
 
     @property
+    def source(self):
+        """
+        รับค่าแหล่งที่มา (source) ของแทร็ก
+
+        คืนค่าแหล่งที่มาจากตัวแปร _source ซึ่งถูกกำหนดใน constructor
+
+        Returns:
+            str: แหล่งที่มาของปัจจุบันของแทร็ก
+        """
+        return self._source
+
+    @source.setter
+    def source(self, value: str):
+        """
+        ตั้งค่าให้กับแหล่งที่มา (source) ของแทร็ก
+
+        กำหนดชื่อแหล่งที่มาใหม่ให้กับตัวแปร _source
+
+        Args:
+            value (str): แหล่งที่มาของปัจจุบันของแทร็ก
+        """
+        self._source = value
+
+    @property
+    def uri(self):
+        """
+        รับค่าลิงก์ล่าสุด (uri) ของแทร็ก
+
+        คืนค่าลิงก์แทร็กจากตัวแปร _uri ซึ่งถูกกำหนดใน constructor
+
+        Returns:
+            str: ลิงก์ล่าสุดของแทร็ก
+        """
+        return self._uri
+
+    @uri.setter
+    def uri(self, value: str):
+        """
+        ตั้งค่าให้กับลิงก์ล่าสุด (uri) ของแทร็ก
+
+        กำหนดชื่อลิงก์ล่าสุดใหม่ให้กับตัวแปร _uri
+
+        Args:
+            value (str): ลิงก์ล่าสุดของแทร็ก
+        """
+        self._uri = value
+
+    @property
     def info(self) -> InfoTrack:
         """
         คืนค่าข้อมูลทั้งหมดของแทร็กในรูปแบบ InfoTrack
 
         ถ้าข้อมูล info ยังไม่ถูกตั้งค่า จะทำการสร้าง InfoTrack ใหม่และเก็บไว้ใน _info
-        ข้อมูลที่คืนมาจะรวมถึงชื่อแทร็ก, อัลบัม, ผู้แต่ง, artwork และข้อมูลอื่นๆ ที่เกี่ยวข้อง
+        ข้อมูลที่คืนมาจะรวมถึงชื่อแทร็ก, อัลบัม, ผู้แต่ง, artwork, ลิงก์ของแทร็ก, แหล่งที่มา และข้อมูลอื่นๆ ที่เกี่ยวข้อง
 
         Returns:
             InfoTrack: ข้อมูลของแทร็กในรูปแบบ InfoTrack
@@ -212,5 +272,7 @@ class InfoTrack_Class(wavelink.Playable):
                 artwork=self._artwork,
                 author=self._author,
                 duration=self._duration,
+                uri=self._uri,
+                source=self._source,
             )
         return self._info
