@@ -288,6 +288,7 @@ class Nanao_Player(wavelink.Player):
                 duration=tracks.tracks[0].length,
                 source=tracks.tracks[0].source,
                 uri=tracks.tracks[0].uri,
+                position=tracks.tracks[0].position,
             )
             self.set_current_track(first_track_info)
             return tracks
@@ -302,6 +303,7 @@ class Nanao_Player(wavelink.Player):
                 duration=track.length,
                 source=track.source,
                 uri=track.uri,
+                position=track.position,
             )
             await self.queue.put_wait(track)
             self.set_current_track(track_info)

@@ -9,7 +9,7 @@ class InfoTrack:
     คลาสนี้เก็บข้อมูลเกี่ยวกับแทร็กเพลงที่มีคุณสมบัติที่จำเป็น\n
     ในการแสดงข้อมูลเพลง\n
     เช่น ชื่อเพลง, อัลบั้ม, ศิลปิน, ภาพปก,
-    ผู้แต่ง และระยะเวลา, แหล่งที่มา, ลิงก์ของแทร็ก
+    ผู้แต่ง และระยะเวลา, แหล่งที่มา, ลิงก์ของแทร็ก, ระยะเวลาเริ่มต้น
 
     Attributes:
         title (str): ชื่อของเพลง
@@ -20,6 +20,7 @@ class InfoTrack:
         duration (int): ระยะเวลา (มิลลิวินาที) ของเพลง
         uri (str): ลิงก์ URL ของแทร็กปัจจุบัน
         source (str): แหล่งที่มาปัจจุบันของแทร็ก
+        position (int): ระยะเวลาเริ่มต้นของแทร็ก
     """
 
     title: str
@@ -38,13 +39,15 @@ class InfoTrack:
     """ส่งลิงก์ URL ของแทร็กปัจจุบัน"""
     source: str
     """ส่งแหล่งที่มาปัจจุบันของแทร็กเช่น Youtube หรือ Spotify"""
+    position: int
+    """ส่งระยะเวลาของแทร็กปัจจุบัน (มิลลิวินาที)"""
 
 
 class InfoTrack_Class(wavelink.Playable):
     """
     คลาสสำหรับจัดการข้อมูลแทร็กเพลงที่ได้รับจาก Playable\n
     ซึ่งจะเก็บข้อมูลต่างๆ ที่เกี่ยวข้องกับแทร็กเพลง\n
-    เช่น ชื่อแทร็ก, อัลบั้ม, ศิลปิน, ภาพปก, เวลาแทร็ก, แหล่งที่มา, ลิงก์ของแทร็ก และข้อมูลดิบ
+    เช่น ชื่อแทร็ก, อัลบั้ม, ศิลปิน, ภาพปก, เวลาแทร็ก, แหล่งที่มา, ลิงก์ของแทร็ก, ระยะเวลาเริ่มต้น และข้อมูลดิบ
     """
 
     def __init__(
@@ -56,6 +59,7 @@ class InfoTrack_Class(wavelink.Playable):
         duration: int,
         uri: str,
         source: str,
+        position: int,
         data: Any,
     ):
         """
@@ -70,6 +74,7 @@ class InfoTrack_Class(wavelink.Playable):
             duration (int): เวลาปัจจุบันของแทร็ก
             uri (str): ลิงก์ของแทร็กปัจจุบัน
             source (str): แหล่งที่มาปัจจุบันของแทร็ก
+            position (int): ระยะเวลาเริ่มต้นของแทร็ก
         """
         super().__init__(data)
         self._title = title
@@ -79,6 +84,7 @@ class InfoTrack_Class(wavelink.Playable):
         self._duration = duration
         self._uri = uri
         self._source = source
+        self._position = position
         self.data = data
         self._info = None
 
@@ -251,12 +257,36 @@ class InfoTrack_Class(wavelink.Playable):
         self._uri = value
 
     @property
+    def position(self):
+        """
+        รับค่าเวลาเริ่มต้น (position) ของแทร็ก
+
+        คืนค่าระยะเวลาเริ่มต้นจากตัวแปร _position ซึ่งถูกกำหนดใน constructor
+
+        Returns:
+            int: ระยะเวลาปัจจุบันที่เพลงกำลังเล่น
+        """
+        return self._position
+
+    @position.setter
+    def position(self, value: int):
+        """
+        ตั้งค่าให้กับเวลาปัจจุบัน (position) ของแทร็ก
+
+        กำหนดระยะเวลาเริ่มต้นให้กับตัวแปร _position
+
+        Args:
+            value (int): ระยะเวลาปัจจุบันที่เพลงกำลังเล่น
+        """
+        self._position = value
+
+    @property
     def info(self) -> InfoTrack:
         """
         คืนค่าข้อมูลทั้งหมดของแทร็กในรูปแบบ InfoTrack
 
         ถ้าข้อมูล info ยังไม่ถูกตั้งค่า จะทำการสร้าง InfoTrack ใหม่และเก็บไว้ใน _info
-        ข้อมูลที่คืนมาจะรวมถึงชื่อแทร็ก, อัลบัม, ผู้แต่ง, artwork, ลิงก์ของแทร็ก, แหล่งที่มา และข้อมูลอื่นๆ ที่เกี่ยวข้อง
+        ข้อมูลที่คืนมาจะรวมถึงชื่อแทร็ก, อัลบัม, ผู้แต่ง, artwork, ลิงก์ของแทร็ก, แหล่งที่มา, ระยะเวลาเริ่มต้น และข้อมูลอื่นๆ ที่เกี่ยวข้อง
 
         Returns:
             InfoTrack: ข้อมูลของแทร็กในรูปแบบ InfoTrack
@@ -274,5 +304,6 @@ class InfoTrack_Class(wavelink.Playable):
                 duration=self._duration,
                 uri=self._uri,
                 source=self._source,
+                position=self._position,
             )
         return self._info
