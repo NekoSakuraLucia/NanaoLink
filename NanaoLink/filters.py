@@ -361,3 +361,29 @@ class Equalizer:
         filters: wavelink.Filters = self.player.filters
         filters.equalizer.set(bands=bands)
         await self.player.set_filters(filters)
+
+
+class RESET_FILTERS:
+    """
+    Class สำหรับจัดการรีเซ็ตฟิลเตอร์ Reset Filters
+    ซึ่งใช้เพื่อปรับฟิลเตอร์ทั้งหมดให้กับสู่ค่าเริ่มต้น Reset
+    """
+
+    def __init__(self, player: wavelink.Player) -> None:
+        """
+        กำหนดค่าเริ่มต้นให้กับ Reset Filters
+        Args:
+            player (wavelink.Player): อ็อบเจกต์ผู้เล่นที่ต้องการใช้ฟิลเตอร์
+        """
+        self.player = player
+
+    async def reset(self):
+        """
+        ตั้งค่าฟิลเตอร์ Reset Filters สำหรับจัดการรีเซ็ตฟิลเตอร์ทั้งหมด
+
+        ฟังก์ชันนี้จะปรับค่า Reset และทำการรีเซ็ตฟิลเตอร์ของเพลงให้กับคุณ\n
+        และเรียกใช้ฟังก์ชัน set_filters เพื่ออัปเดตฟิลเตอร์ของผู้เล่น
+        """
+        filters: wavelink.Filters = self.player.filters
+        filters.reset()
+        await self.player.set_filters(filters)

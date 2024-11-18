@@ -152,6 +152,20 @@ async def equalizer(ctx: commands.Context):
     await ctx.send(f"เปิดการใช้งาน Equalizer แล้ว")
 
 
+@bot.command(name="reset_filters")
+async def reset_filters(ctx: commands.Context):
+    player: Optional[Nanao_Player] = ctx.voice_client
+    if not player:
+        return
+
+    if not player:
+        await ctx.send("ไม่สามารถสร้าง player ได้")
+        return
+
+    await player.Filters_Mode.reset()
+    await ctx.send(f"ปิดการใช้งานฟิลเตอร์ทั้งหมดแล้ว")
+
+
 # Note: ในที่นี้เราจะยกตัวอย่างการใช้ฟิลเตอร์แค่สองตัวก่อน ยังมีอีกหลายฟิลเตอร์ที่คุณสามารถใช้ได้อีกหลายตัว
 # Note: Here we will give an example of using just two filters first. There are many more filters you can use.
 

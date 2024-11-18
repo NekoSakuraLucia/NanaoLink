@@ -24,6 +24,7 @@ class Nanao_Player(wavelink.Player):
         self._vibrato = Vibrato(self)
         self._channelmix = ChannelMix(self)
         self._equalizer = Equalizer(self)
+        self._resetFilters = RESET_FILTERS(self)
 
     @property
     def filters(self):
@@ -112,6 +113,14 @@ class Nanao_Player(wavelink.Player):
         และคืนค่า Equalizer ที่ถูกสร้างจากผู้เล่นนี้
         """
         return self._equalizer
+    
+    @property
+    def Filters_Mode(self):
+        """
+        Property สำหรับสร้างอ็อบเจกต์ Reset Filters
+        และคืนค่า Reset ที่ถูกสร้างจากผู้เล่นนี้
+        """
+        return self._resetFilters
 
     def create_filters(self):
         """
