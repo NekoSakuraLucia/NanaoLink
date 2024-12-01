@@ -1,6 +1,6 @@
 import wavelink
 from dataclasses import dataclass
-from typing import Any
+from typing import Dict, Any, Union
 
 
 @dataclass
@@ -60,7 +60,7 @@ class InfoTrack_Class(wavelink.Playable):
         uri: str,
         source: str,
         position: int,
-        data: Any,
+        data: Union[Dict, Any],
     ):
         """
         กำหนดค่าเริ่มต้นสำหรับข้อมูลแทร็กเพลง
@@ -70,7 +70,7 @@ class InfoTrack_Class(wavelink.Playable):
             album (str): ชื่ออัลบั้มของแทร็ก
             artwork (str): URL ของภาพหน้าปก
             author (str): ชื่อผู้แต่งหรือศิลปิน
-            data (Any): ข้อมูลดิบที่มาจาก Wavelink
+            data (Union[Dict, Any]): ข้อมูลดิบที่มาจาก Wavelink ซึ่งอาจจะเป็น dict หรือประเภทอื่น
             duration (int): เวลาปัจจุบันของแทร็ก
             uri (str): ลิงก์ของแทร็กปัจจุบัน
             source (str): แหล่งที่มาปัจจุบันของแทร็ก
