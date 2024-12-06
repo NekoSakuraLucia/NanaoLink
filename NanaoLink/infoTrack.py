@@ -19,7 +19,7 @@ class InfoTrack:
         author (str): ผู้แต่งเพลง หรือผู้เขียนเนื้อเพลง
         duration (int): ระยะเวลา (มิลลิวินาที) ของเพลง
         uri (str): ลิงก์ URL ของแทร็กปัจจุบัน
-        source (str): แหล่งที่มาปัจจุบันของแทร็ก
+        sourceName (str): แหล่งที่มาปัจจุบันของแทร็ก
         position (int): ระยะเวลาเริ่มต้นของแทร็ก
     """
 
@@ -37,7 +37,7 @@ class InfoTrack:
     """ส่งระยะเวลาทั้งหมดของเพลง (มิลลิวินาที)"""
     uri: str
     """ส่งลิงก์ URL ของแทร็กปัจจุบัน"""
-    source: str
+    sourceName: str
     """ส่งแหล่งที่มาปัจจุบันของแทร็กเช่น Youtube หรือ Spotify"""
     position: int
     """ส่งระยะเวลาของแทร็กปัจจุบัน (มิลลิวินาที)"""
@@ -58,7 +58,7 @@ class InfoTrack_Class(wavelink.Playable):
         author: str,
         duration: int,
         uri: str,
-        source: str,
+        sourceName: str,
         position: int,
         data: Union[Dict, Any],
     ):
@@ -83,7 +83,7 @@ class InfoTrack_Class(wavelink.Playable):
         self._author = author
         self._duration = duration
         self._uri = uri
-        self._source = source
+        self._source = sourceName
         self._position = position
         self.data = data
         self._info = None
@@ -209,9 +209,9 @@ class InfoTrack_Class(wavelink.Playable):
         self._duration = value
 
     @property
-    def source(self):
+    def sourceName(self):
         """
-        รับค่าแหล่งที่มา (source) ของแทร็ก
+        รับค่าแหล่งที่มา (sourceName) ของแทร็ก
 
         คืนค่าแหล่งที่มาจากตัวแปร _source ซึ่งถูกกำหนดใน constructor
 
@@ -220,10 +220,10 @@ class InfoTrack_Class(wavelink.Playable):
         """
         return self._source
 
-    @source.setter
-    def source(self, value: str):
+    @sourceName.setter
+    def sourceName(self, value: str):
         """
-        ตั้งค่าให้กับแหล่งที่มา (source) ของแทร็ก
+        ตั้งค่าให้กับแหล่งที่มา (sourceName) ของแทร็ก
 
         กำหนดชื่อแหล่งที่มาใหม่ให้กับตัวแปร _source
 
@@ -303,7 +303,7 @@ class InfoTrack_Class(wavelink.Playable):
                 author=self._author,
                 duration=self._duration,
                 uri=self._uri,
-                source=self._source,
+                sourceName=self._source,
                 position=self._position,
             )
         return self._info
